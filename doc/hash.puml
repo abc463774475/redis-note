@@ -1,0 +1,83 @@
+@startmindmap
+title dictExpand 扩展到底执行rehash 不呢？
+* dictExpand - expand a dictionary 俗称 reshash ht[1] 为新的
+
+** dictResize
+*** tryResizeHashTables  serverCron 1s 1次
+*** hashTypeDelete
+*** setTypeRemove
+*** zsetDel
+*** zremrangeGenericCommand
+** _dictExpandIfNeeded
+** setTypeConvert
+** zunionInterGenericCommand
+
+
+@endmindmap
+
+
+@startmindmap
+title rehashidx
+* rehashidx
+** #define dictIsRehashing(d) ((d)->rehashidx != -1) 判断是否在rehash
+** dictExpand d->rehashidx = 0;
+** dictRehash
+** dictGetRandomKey
+** dictGetSomeKeys
+
+** dictEmpty d->rehashidx = -1;
+
+@endmindmap
+
+
+@startmindmap
+title dictRehash
+* dictRehash
+** dictRehashMilliseconds
+*** incrementallyRehash
+**** databasesCron
+
+** _dictRehashStep \n\
+static void _dictRehashStep(dict *d) {\n\
+    if (d->iterators == 0) dictRehash(d,1);\n\
+}\n\
+每次搬一个
+' 下面的很有很有意思，基本牵涉增删改查的地方 ，判断是否在rehash，如果在rehash，就执行一次rehash，这样就保证了在rehash的时候，不会有太多的操作，影响rehash的效率
+*** dictAddRaw
+*** dictGenericDelete
+*** dictFind
+
+*** dictGetRandomKey 获取随机key，，一个值
+' cluster 相关的调用
+**** clusterSendPing
+**** clusterCron
+**** migrateGetSocket
+
+**** dbRandomKey
+***** randomkeyCommand
+****** {"randomkey",randomkeyCommand,1,"rR",0,NULL,0,0,0,0,0},
+
+
+**** freeMemoryIfNeeded
+
+**** activeExpireCycle
+**** expireSlaveKeys
+**** setTypeRandomElement
+**** srandmemberWithCountCommand
+
+
+
+
+*** dictGetSomeKeys
+**** evictionPoolPopulate 驱逐池
+***** freeMemoryIfNeeded
+****** freeMemoryIfNeededAndSafe
+******* configSetCommand
+******** {"config",configCommand,-2,"last",0,NULL,0,0,0,0,0},
+******* processCommand \n\
+if (server.maxmemory && !server.lua_timedout) {\n\
+        int out_of_memory = freeMemoryIfNeededAndSafe() == C_ERR;
+
+**** stressGetKeys 用于测试 不用管
+
+@endmindmap

@@ -53,6 +53,8 @@ struct __attribute__ ((__packed__)) sdshdr8 {
     unsigned char flags; /* 3 lsb of type, 5 unused bits */
     char buf[];
 };
+
+// 取消内存对齐，按照实际占用的字节对齐
 struct __attribute__ ((__packed__)) sdshdr16 {
     uint16_t len; /* used */
     uint16_t alloc; /* excluding the header and null terminator */

@@ -158,7 +158,7 @@ void evictionPoolAlloc(void) {
  * We insert keys on place in ascending order, so keys with the smaller
  * idle time are on the left, and keys with the higher idle time on the
  * right. */
-
+// 表示 sampledict 中的 keydict 中的 key 有可能被淘汰
 void evictionPoolPopulate(int dbid, dict *sampledict, dict *keydict, struct evictionPoolEntry *pool) {
     int j, k, count;
     dictEntry *samples[server.maxmemory_samples];

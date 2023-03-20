@@ -76,6 +76,7 @@ typedef struct dictht {
 typedef struct dict {
     dictType *type;
     void *privdata;
+    // 两个哈希表, 用于渐进式 rehash, 一个用于查找, 一个用于插入
     dictht ht[2];
     long rehashidx; /* rehashing not in progress if rehashidx == -1 */
     unsigned long iterators; /* number of iterators currently running */

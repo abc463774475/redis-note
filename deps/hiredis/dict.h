@@ -45,6 +45,7 @@
 typedef struct dictEntry {
     void *key;
     void *val;
+    // 指向下一个节点
     struct dictEntry *next;
 } dictEntry;
 
@@ -58,11 +59,17 @@ typedef struct dictType {
 } dictType;
 
 typedef struct dict {
+    // 字典中的所有节点
     dictEntry **table;
+    // 字典的类型
     dictType *type;
+    // 字典的大小
     unsigned long size;
+    // 字典已有节点的数量
     unsigned long sizemask;
+    // 字典已有节点的数量
     unsigned long used;
+    // rehash 索引
     void *privdata;
 } dict;
 
@@ -98,6 +105,7 @@ typedef struct dictIterator {
         entry->key = (_key_); \
 } while(0)
 
+// 比较两个键是否相等, privdata redis中为N
 #define dictCompareHashKeys(ht, key1, key2) \
     (((ht)->type->keyCompare) ? \
         (ht)->type->keyCompare((ht)->privdata, key1, key2) : \

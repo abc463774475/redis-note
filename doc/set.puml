@@ -1,0 +1,6 @@
+@startmindmap
+title set
+* set 底层结构
+** intset 整数集合  整数  512 之内
+** hashtable 哈希表
+@endmindmap

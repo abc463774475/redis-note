@@ -1006,6 +1006,7 @@ void clientsCron(void) {
 /* This function handles 'background' operations we are required to do
  * incrementally in Redis databases, such as active key expiring, resizing,
  * rehashing. */
+// 表示1ms钟执行一次
 void databasesCron(void) {
     /* Expire keys by random sampling. Not required for slaves
      * as master will synthesize DELs for us. */
@@ -1108,6 +1109,7 @@ void updateCachedTime(int update_daylight_info) {
  * a macro is used: run_with_period(milliseconds) { .... }
  */
 
+// 表示1ms秒钟执行一次 serverCron
 int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
     int j;
     UNUSED(eventLoop);
