@@ -1,0 +1,9 @@
+@startmindmap
+title lazyfree
+* expireIfNeeded
+** lookupKeyReadWithFlags
+** lookupKeyWrite
+** dbRandomKey
+** delGenericCommand
+** scanGenericCommand
+@endmindmap
