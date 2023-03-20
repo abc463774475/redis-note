@@ -1,0 +1,27 @@
+@startmindmap
+title zset zsetConvert skiplist 和 ziplist 相互转换
+* zsetConvert
+** rdbLoadObject
+** sortCommand
+** "sort" 表示对集合进行排序
+
+** zsetConvertToZiplistIfNeeded
+*** georadiusGeneric
+**** "georadius" 表示在指定的经纬度范围内查找指定的地理位置
+*** zunionInterGenericCommand
+**** zunionstoreCommand
+***** "zunionstore" 计算多个集合的并集
+**** zinterstoreCommand
+***** "zinterstore" 计算多个集合的交集
+
+
+** zsetAdd
+*** RM_ZsetAdd 没有使用
+*** RM_ZsetIncrby 没有使用
+*** zaddGenericCommand
+**** zaddCommand
+***** "zadd"
+**** zincrbyCommand
+***** "zincrby"
+
+@endmindmap

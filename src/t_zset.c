@@ -1363,6 +1363,7 @@ int zsetAdd(robj *zobj, double score, sds ele, int *flags, double *newscore) {
                 sdslen(ele) > server.zset_max_ziplist_value ||
                 !ziplistSafeToAdd(zobj->ptr, sdslen(ele)))
             {
+                // 自动转换为 skiplist
                 zsetConvert(zobj,OBJ_ENCODING_SKIPLIST);
             } else {
                 zobj->ptr = zzlInsert(zobj->ptr,ele,score);
@@ -1608,6 +1609,7 @@ void zaddGenericCommand(client *c, int flags) {
 
     /* Lookup the key and create the sorted set if does not exist. */
     zobj = lookupKeyWrite(c->db,key);
+    // 这里就表明zipList和skiplist是可以共存的
     if (zobj == NULL) {
         if (xx) goto reply_to_client; /* No key + XX option: nothing to do. */
         if (server.zset_max_ziplist_entries == 0 ||
@@ -1670,6 +1672,7 @@ void zincrbyCommand(client *c) {
     zaddGenericCommand(c,ZADD_INCR);
 }
 
+// 删除元素
 void zremCommand(client *c) {
     robj *key = c->argv[1];
     robj *zobj;
