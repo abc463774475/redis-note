@@ -87,13 +87,14 @@ sds keyspaceEventsFlagsToString(int flags) {
     return res;
 }
 
-/* The API provided to the rest of the Redis core is a simple function:
+/* The API provided to the rest of the Redis core is a simple function: api 提供了一个简单的函数
  *
  * notifyKeyspaceEvent(char *event, robj *key, int dbid);
  *
  * 'event' is a C string representing the event name.
  * 'key' is a Redis object representing the key name.
  * 'dbid' is the database ID where the key lives.  */
+// 通知事件, 通过发布订阅机制
 void notifyKeyspaceEvent(int type, char *event, robj *key, int dbid) {
     sds chan;
     robj *chanobj, *eventobj;
@@ -104,6 +105,7 @@ void notifyKeyspaceEvent(int type, char *event, robj *key, int dbid) {
      * This bypasses the notifications configuration, but the module engine
      * will only call event subscribers if the event type matches the types
      * they are interested in. */
+    // 如果有模块订阅了事件, 则调用模块系统
      moduleNotifyKeyspaceEvent(type, event, key, dbid);
     
     /* If notifications for this class of events are off, return ASAP. */
@@ -112,6 +114,7 @@ void notifyKeyspaceEvent(int type, char *event, robj *key, int dbid) {
     eventobj = createStringObject(event,strlen(event));
 
     /* __keyspace@<db>__:<key> <event> notifications. */
+    // 发布 __keyspace@<db>__:<key> <event> 事件 主要是 key 的变化
     if (server.notify_keyspace_events & NOTIFY_KEYSPACE) {
         chan = sdsnewlen("__keyspace@",11);
         len = ll2string(buf,sizeof(buf),dbid);
@@ -124,6 +127,7 @@ void notifyKeyspaceEvent(int type, char *event, robj *key, int dbid) {
     }
 
     /* __keyevent@<db>__:<event> <key> notifications. */
+    // 发布 __keyevent@<db>__:<event> <key> 事件 主要是 key 的变化
     if (server.notify_keyspace_events & NOTIFY_KEYEVENT) {
         chan = sdsnewlen("__keyevent@",11);
         if (len == -1) len = ll2string(buf,sizeof(buf),dbid);

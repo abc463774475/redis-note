@@ -83,6 +83,7 @@ void listReleaseIterator(listIter *iter);
 list *listDup(list *orig);
 listNode *listSearchKey(list *list, void *key);
 listNode *listIndex(list *list, long index);
+// list Rewind 表示从头开始遍历
 void listRewind(list *list, listIter *li);
 void listRewindTail(list *list, listIter *li);
 void listRotateTailToHead(list *list);

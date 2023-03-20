@@ -16,8 +16,8 @@ title zset zsetConvert skiplist 和 ziplist 相互转换
 
 
 ** zsetAdd
-*** RM_ZsetAdd 没有使用
-*** RM_ZsetIncrby 没有使用
+*** RM_ZsetAdd 只搜后面ZsetAdd的调用 用到的 宏定义
+*** RM_ZsetIncrby 只搜后面ZsetIncrby的调用 用到的 宏定义
 *** zaddGenericCommand
 **** zaddCommand
 ***** "zadd"

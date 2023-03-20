@@ -290,6 +290,7 @@ void unwatchAllKeys(client *c) {
 
 /* "Touch" a key, so that if this key is being WATCHed by some client the
  * next EXEC will fail. */
+// 表示key被修改了，需要检查是否有事务在监视这个key
 void touchWatchedKey(redisDb *db, robj *key) {
     list *clients;
     listIter li;

@@ -4127,6 +4127,7 @@ void moduleReleaseGIL(void) {
  *
  * See https://redis.io/topics/notifications for more information.
  */
+// SubscribeToKeyspaceEvents 只搜SubscribeToKeyspaceEvents 前缀 用的宏替代的！c c++ 蛋疼的地方
 int RM_SubscribeToKeyspaceEvents(RedisModuleCtx *ctx, int types, RedisModuleNotificationFunc callback) {
     RedisModuleKeyspaceSubscriber *sub = zmalloc(sizeof(*sub));
     sub->module = ctx->module;
@@ -4141,6 +4142,7 @@ int RM_SubscribeToKeyspaceEvents(RedisModuleCtx *ctx, int types, RedisModuleNoti
 /* Dispatcher for keyspace notifications to module subscriber functions.
  * This gets called  only if at least one module requested to be notified on
  * keyspace notifications */
+// 模块订阅的事件回调函数
 void moduleNotifyKeyspaceEvent(int type, const char *event, robj *key, int dbid) {
     /* Don't do anything if there aren't any subscribers */
     if (listLength(moduleKeyspaceSubscribers) == 0) return;
@@ -4166,6 +4168,7 @@ void moduleNotifyKeyspaceEvent(int type, const char *event, robj *key, int dbid)
              * If the subscriber performs an action triggering itself,
              * it will not be notified about it. */
             sub->active = 1;
+            // 订阅事件的回调函数
             sub->notify_callback(&ctx, type, event, key);
             sub->active = 0;
             moduleFreeContext(&ctx);
